@@ -1,0 +1,19 @@
+{
+  "name": "plot-csv",
+  "version": "1.0.0",
+  "description": "A command line utility that generates and serves a plot of CSV data",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ndmekala/plot-csv.git"
+  },
+  "author": "Nirmal Mekala",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ndmekala/plot-csv/issues"
+  },
+  "homepage": "https://github.com/ndmekala/plot-csv#readme"
+}
