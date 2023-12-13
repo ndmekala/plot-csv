@@ -1,4 +1,6 @@
 const express = require('express');
+const fs = require('fs');
+const { parse } = require('csv-parse/sync');
 
 const app = express();
 
@@ -64,4 +66,7 @@ const port = 4143;
 app.listen(port, () => {
   console.log(`Listening on port 4143`);
   console.log(process.argv[2] ? process.argv[2] : 'No file specified');
+  const csvData = fs.readFileSync(process.argv[2], 'utf8');
+  console.log(parse(csvData));
+
 });
