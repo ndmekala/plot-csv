@@ -5,9 +5,26 @@ const app = express();
 app.get('/', (req, res) => {
   res.send(`
 
-    <div>
-      <canvas id="plot"></canvas>
+    <style>
+    .container {
+      display: flex;
+      justify-content: center;
+    }
+    .wrapper {
+      max-width: 1200px;
+      padding-right: 10px;
+      padding-left: 10px;
+    }
+
+    </style>
+
+    <body>
+    <div class="container">
+      <div class="wrapper">
+        <canvas width="400" height="400" id="plot"></canvas>
+      </div>
     </div>
+    <body>
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
@@ -46,4 +63,5 @@ const port = 4143;
 
 app.listen(port, () => {
   console.log(`Listening on port 4143`);
+  console.log(process.argv[2] ? process.argv[2] : 'No file specified');
 });
