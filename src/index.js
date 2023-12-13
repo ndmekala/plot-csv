@@ -64,9 +64,11 @@ app.get('/', (req, res) => {
 const port = 4143;
 
 app.listen(port, () => {
-  console.log(`Listening on port 4143`);
+  console.log(`Listening on port ${port}`);
+  import('open').then((module) => {
+    module.default(`http://localhost:${port}`);
+  });
   console.log(process.argv[2] ? process.argv[2] : 'No file specified');
   const csvData = fs.readFileSync(process.argv[2], 'utf8');
   console.log(parse(csvData));
-
 });
