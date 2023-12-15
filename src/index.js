@@ -7,26 +7,23 @@ const app = express();
 const csvPath = process.argv[2];
 const csvData = fs.readFileSync(csvPath, 'utf8');
 const data = parse(csvData);
-console.log(data);
 
 const xLabel = data[0][0];
 const yLabels = data[0].slice(1);
-console.log('xLabel', xLabel);
-console.log('yLabels', yLabels);
+
 let datasets = [];
 const colors = [
+  '#ff5faf',
   '#5faf5f',
   '#5fafd7',
   '#d7875f',
   '#afd700',
   '#af87d7',
-  '#ff5faf',
   '#00afaf',
   '#5f8787',
 ];
 
 for (let i = 1; i < data[0].length; i++) {
-  // for each y dataset…
   datasets.push({
     label: yLabels[i - 1],
     data: data.slice(1).map((row, index) => {
@@ -40,12 +37,14 @@ for (let i = 1; i < data[0].length; i++) {
   });
 }
 
-console.log(datasets);
-
 app.get('/', (req, res) => {
   res.send(`
 
     <style>
+    body {
+      background-color: #444444;
+    }
+
     .container {
       display: flex;
       justify-content: center;
@@ -54,6 +53,7 @@ app.get('/', (req, res) => {
       max-width: 1200px;
       padding-right: 10px;
       padding-left: 10px;
+      padding-top: 100px;
     }
     .chart {
       background-color: #444444;
@@ -73,18 +73,34 @@ app.get('/', (req, res) => {
     
     <script>
       const ctx = document.getElementById('plot');
-    
+      const darkGrey = '#444444';
+      const lightGrey = '#d0d0d0';
 
       new Chart(ctx, {
         type: 'scatter',
         data: ${JSON.stringify({ datasets })},
         options: {
+          color: lightGrey,
           showLine: true,
           scales: {
             x: {
+              grid: {
+                color: lightGrey,
+              },
               type: 'linear',
               position: 'bottom',
-            }
+              ticks: {
+                color: lightGrey,
+              }
+            },
+            y: {
+              grid: {
+                color: lightGrey,
+              },
+              ticks: {
+                color: lightGrey,
+              }
+            },
           }
         }
       });
