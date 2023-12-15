@@ -4,6 +4,44 @@ const { parse } = require('csv-parse/sync');
 
 const app = express();
 
+const csvPath = process.argv[2];
+const csvData = fs.readFileSync(csvPath, 'utf8');
+const data = parse(csvData);
+console.log(data);
+
+const xLabel = data[0][0];
+const yLabels = data[0].slice(1);
+console.log('xLabel', xLabel);
+console.log('yLabels', yLabels);
+let datasets = [];
+const colors = [
+  '#5faf5f',
+  '#5fafd7',
+  '#d7875f',
+  '#afd700',
+  '#af87d7',
+  '#ff5faf',
+  '#00afaf',
+  '#5f8787',
+];
+
+for (let i = 1; i < data[0].length; i++) {
+  // for each y dataset…
+  datasets.push({
+    label: yLabels[i - 1],
+    data: data.slice(1).map((row, index) => {
+      return {
+        x: row[0],
+        y: row[i],
+      };
+    }),
+    borderColor: colors[i - 1],
+    backgroundColor: colors[i - 1],
+  });
+}
+
+console.log(datasets);
+
 app.get('/', (req, res) => {
   res.send(`
 
@@ -17,13 +55,16 @@ app.get('/', (req, res) => {
       padding-right: 10px;
       padding-left: 10px;
     }
+    .chart {
+      background-color: #444444;
+    }
 
     </style>
 
     <body>
     <div class="container">
       <div class="wrapper">
-        <canvas width="400" height="400" id="plot"></canvas>
+        <canvas class="chart" width="400" height="400" id="plot"></canvas>
       </div>
     </div>
     <body>
@@ -33,25 +74,16 @@ app.get('/', (req, res) => {
     <script>
       const ctx = document.getElementById('plot');
     
-      const labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-      const lineData = {
-        labels: labels,
-        datasets: [{
-          label: 'My First Dataset',
-          data: [65, 59, 80, 81, 56, 55, 40],
-          fill: false,
-          borderColor: 'rgb(75, 192, 192)',
-          tension: 0.1
-        }]
-      };
 
       new Chart(ctx, {
-        type: 'line',
-        data: lineData,
+        type: 'scatter',
+        data: ${JSON.stringify({ datasets })},
         options: {
+          showLine: true,
           scales: {
-            y: {
-              beginAtZero: true
+            x: {
+              type: 'linear',
+              position: 'bottom',
             }
           }
         }
@@ -68,7 +100,4 @@ app.listen(port, () => {
   import('open').then((module) => {
     module.default(`http://localhost:${port}`);
   });
-  console.log(process.argv[2] ? process.argv[2] : 'No file specified');
-  const csvData = fs.readFileSync(process.argv[2], 'utf8');
-  console.log(parse(csvData));
 });
