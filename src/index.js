@@ -14,13 +14,13 @@ const yLabels = data[0].slice(1);
 let datasets = [];
 const colors = [
   '#ff5faf',
-  '#5faf5f',
-  '#5fafd7',
-  '#d7875f',
-  '#afd700',
   '#af87d7',
+  '#5fafd7',
   '#00afaf',
   '#5f8787',
+  '#5faf5f',
+  '#afd700',
+  '#d7875f',
 ];
 
 for (let i = 1; i < data[0].length; i++) {
@@ -41,22 +41,26 @@ app.get('/', (req, res) => {
   res.send(`
 
     <style>
+
     body {
-      background-color: #444444;
+      background-color: #1c1c1c;
     }
 
     .container {
       display: flex;
       justify-content: center;
+      padding-top: 50px;
     }
+
     .wrapper {
-      max-width: 1200px;
+      width: 100%;
+      max-width: 800px;
       padding-right: 10px;
       padding-left: 10px;
-      padding-top: 100px;
     }
+
     .chart {
-      background-color: #444444;
+      background-color: #1c1c1c;
     }
 
     </style>
@@ -64,7 +68,7 @@ app.get('/', (req, res) => {
     <body>
     <div class="container">
       <div class="wrapper">
-        <canvas class="chart" width="400" height="400" id="plot"></canvas>
+        <canvas class="chart" id="plot"></canvas>
       </div>
     </div>
     <body>
@@ -73,32 +77,33 @@ app.get('/', (req, res) => {
     
     <script>
       const ctx = document.getElementById('plot');
-      const darkGrey = '#444444';
-      const lightGrey = '#d0d0d0';
+
+      const grey = '#585858'
 
       new Chart(ctx, {
         type: 'scatter',
         data: ${JSON.stringify({ datasets })},
         options: {
-          color: lightGrey,
+          responsive: true,
+          color: grey,
           showLine: true,
           scales: {
             x: {
               grid: {
-                color: lightGrey,
+                color: grey,
               },
               type: 'linear',
               position: 'bottom',
               ticks: {
-                color: lightGrey,
+                color: grey,
               }
             },
             y: {
               grid: {
-                color: lightGrey,
+                color: grey,
               },
               ticks: {
-                color: lightGrey,
+                color: grey,
               }
             },
           }
@@ -112,7 +117,16 @@ app.get('/', (req, res) => {
 const port = 4143;
 
 app.listen(port, () => {
-  console.log(`Listening on port ${port}`);
+  console.log(
+    '\x1b[32m%s\x1b[0m',
+    `
+┌─────────────────────────────┐
+│                             │
+│    Chart 📈 on port ${port}    │
+│                             │
+└─────────────────────────────┘
+`,
+  );
   import('open').then((module) => {
     module.default(`http://localhost:${port}`);
   });
