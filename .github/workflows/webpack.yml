@@ -24,8 +24,8 @@ jobs:
         npx webpack
 
     - name: Archive build output
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: build
-        path: dist/build.js
+        path: dist
 
