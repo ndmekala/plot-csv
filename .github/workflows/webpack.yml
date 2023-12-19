@@ -23,11 +23,10 @@ jobs:
           npm install -y
           npx webpack
 
-      - name: Add shebang and make executable
+      - name: Add shebang
         run: |
           (echo "#!/usr/bin/env node"; cat dist/bundle.js) > tmp
           mv tmp dist/bundle.js
-          chmod u+x dist/bundle.js
 
       - name: Archive build output
         uses: actions/upload-artifact@v3
