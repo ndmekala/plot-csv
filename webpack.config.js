@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
   entry: './src/index.js', // The entry point of your Node.js application.
@@ -8,5 +9,10 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'), // Output directory for the bundled file.
     filename: 'bundle.js', // The bundled output file.
   },
-};
+  plugins: [
+    new webpack.optimize.LimitChunkCountPlugin({
+      maxChunks: 1,
+    })
+  ]
 
+};
