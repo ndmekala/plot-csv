@@ -31,6 +31,8 @@ for (let i = 1; i < data[0].length; i++) {
         x: row[0],
         y: row[i],
       };
+    }).filter((row) => {
+      return row.y !== '';
     }),
     borderColor: colors[i - 1],
     backgroundColor: colors[i - 1],
