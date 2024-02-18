@@ -1,17 +1,15 @@
 const fs = require('fs');
 
-const validateInput = (argument) => {
-  if (!argument) {
-    console.error('Please provide a valid path to the CSV file');
-    process.exit(1);
-  } else if (!fs.existsSync(argument)) {
-    console.error('The provided path does not exist');
-    process.exit(1);
+const readInput = (argumentArray, expectedLength) => {
+  if (argumentArray.length !== expectedLength) {
+    throw new Error('Please provide one valid path to a CSV file');
+  } else if (!fs.existsSync(argumentArray[2])) {
+    throw new Error('The provided path does not exist');
   } else {
-    return argument
+    return argumentArray[2];
   }
 };
 
 module.exports = {
-  validateInput
-}
+  readInput,
+};

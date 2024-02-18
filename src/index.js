@@ -1,12 +1,19 @@
 const express = require('express');
 const fs = require('fs');
 const { parse } = require('csv-parse/sync');
+const { readInput } = require('./utils');
 
 const app = express();
+let csvPath = ''
+let data = []
 
-const csvPath = process.argv[2];
-const csvData = fs.readFileSync(csvPath, 'utf8');
-const data = parse(csvData);
+try {
+  csvPath = readInput(process.argv, 3);
+  data = parse(fs.readFileSync(csvPath, 'utf8'));
+} catch (error) {
+  console.error(error.message);
+  process.exit(1);
+}
 
 const xLabel = data[0][0];
 const yLabels = data[0].slice(1);
@@ -26,14 +33,17 @@ const colors = [
 for (let i = 1; i < data[0].length; i++) {
   datasets.push({
     label: yLabels[i - 1],
-    data: data.slice(1).map((row, index) => {
-      return {
-        x: row[0],
-        y: row[i],
-      };
-    }).filter((row) => {
-      return row.y !== '';
-    }),
+    data: data
+      .slice(1)
+      .map((row, index) => {
+        return {
+          x: row[0],
+          y: row[i],
+        };
+      })
+      .filter((row) => {
+        return row.y !== '';
+      }),
     borderColor: colors[i - 1],
     backgroundColor: colors[i - 1],
   });

@@ -1,44 +1,24 @@
 const fs = require('fs');
-const { validateInput } = require('../utils');
+const { readInput } = require('../utils');
 
-describe('validateInput function', () => {
+describe('readInput function', () => {
+  const argumentArrayLength = 3;
+
   it('should return the argument if it exists and is a valid path', () => {
-    const existingFilePath = './src/sample.csv';
-    const result = validateInput(existingFilePath);
-
-    expect(result).toBe(existingFilePath);
+    const argumentsArray = ['', '', './src/sample.csv'];
+    const result = readInput(argumentsArray, argumentArrayLength);
+    expect(result).toBe(argumentsArray[2]);
   });
 
-  it('should log an error message and exit the process if the argument is not provided', () => {
-    const consoleSpy = jest
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
-    const processExitSpy = jest
-      .spyOn(process, 'exit')
-      .mockImplementation(() => {});
+  it('should throw an error if too few arguments provided', () => {
+    expect(() => readInput(['', ''], argumentArrayLength)).toThrow('Please provide one valid path to a CSV file');
+  });
 
-    validateInput();
-
-    expect(consoleSpy).toHaveBeenCalledWith(
-      'Please provide a valid path to the CSV file'
-    );
-    expect(processExitSpy).toHaveBeenCalledWith(1);
+  it('should throw an error if too many arguments provided', () => {
+    expect(() => readInput(['', '', './src/sample.csv', ''], argumentArrayLength)).toThrow('Please provide one valid path to a CSV file');
   });
 
   it('should log an error message and exit the process if the argument is not a valid path', () => {
-    const nonExistingFilePath = 'nonExistingFile.csv';
-    const consoleSpy = jest
-      .spyOn(console, 'error')
-      .mockImplementation(() => {});
-    const processExitSpy = jest
-      .spyOn(process, 'exit')
-      .mockImplementation(() => {});
-
-    validateInput(nonExistingFilePath);
-
-    expect(consoleSpy).toHaveBeenCalledWith(
-      'The provided path does not exist',
-    );
-    expect(processExitSpy).toHaveBeenCalledWith(1);
+    expect(() => readInput(['', '', 'nonExistingFile.csv'], argumentArrayLength)).toThrow('The provided path does not exist');
   });
 });
