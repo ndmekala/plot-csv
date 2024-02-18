@@ -9,10 +9,17 @@ module.exports = {
     path: path.resolve(__dirname, 'dist'), // Output directory for the bundled file.
     filename: 'bundle.js', // The bundled output file.
   },
+  module: {
+    rules: [
+      {
+        test: /\.html/,
+        type: 'asset/source',
+      },
+    ],
+  },
   plugins: [
     new webpack.optimize.LimitChunkCountPlugin({
       maxChunks: 1,
-    })
-  ]
-
+    }),
+  ],
 };

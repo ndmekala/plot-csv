@@ -2,10 +2,11 @@ const express = require('express');
 const fs = require('fs');
 const { parse } = require('csv-parse/sync');
 const { readInput } = require('./utils');
+const markup = require('./index.html');
 
 const app = express();
-let csvPath = ''
-let data = []
+let csvPath = '';
+let data = [];
 
 try {
   csvPath = readInput(process.argv, 3);
@@ -49,7 +50,16 @@ for (let i = 1; i < data[0].length; i++) {
   });
 }
 
+app.get('/api/datasets', (req, res) => {
+  res.json({ datasets });
+});
+
 app.get('/', (req, res) => {
+  res.header('Content-Type', 'text/html');
+  res.send(markup);
+})
+
+app.get('/old', (req, res) => {
   res.header('Content-Type', 'text/html');
   res.send(`
     <!DOCTYPE html>
