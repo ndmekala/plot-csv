@@ -10,6 +10,13 @@ const readInput = (argumentArray, expectedLength) => {
   }
 };
 
+const generateChartConfig = (colors, datasets) => {
+  /* make colors an object with color as key and hex code as value */
+  /* include grey. then use colors['grey'] etc. */
+  /* for array type stuff you can do arr = ['pink', 'blue'] then colors[arr[i]] etc*/
+  /* should figure out a way to get that x label in… */
+};
+
 module.exports = {
   readInput,
 };

@@ -39,11 +39,41 @@
   <body>
     <div class="container">
       <div class="wrapper">
-        <h1>CSV Plot -- hellz yeah!</h1>
+        <h1>CSV Plot</h1>
         <canvas class="chart" id="plot"></canvas>
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!--script src="index.js"></script-->
+    <script>
+      const ctx = document.getElementById('plot');
+
+      async function getConfig() {
+        try {
+          const response = await fetch('/api/datasets');
+
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          console.error('There was a problem fetching the data:', error);
+        }
+      }
+
+      async function initChart() {
+        try {
+          const data = await getConfig();
+          // Do something with the fetched data
+          console.log('Data successfully fetched:', data);
+        } catch (error) {
+          // Handle errors if any
+          console.error('Error while fetching data:', error);
+        }
+      }
+
+      initChart();
+    </script>
   </body>
 </html>
