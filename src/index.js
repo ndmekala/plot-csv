@@ -5,6 +5,7 @@ const { readInput } = require('./utils');
 const markup = require('./index.html');
 
 const app = express();
+
 let csvPath = '';
 let data = [];
 
@@ -57,7 +58,7 @@ app.get('/api/datasets', (req, res) => {
 app.get('/', (req, res) => {
   res.header('Content-Type', 'text/html');
   res.send(markup);
-})
+});
 
 app.get('/old', (req, res) => {
   res.header('Content-Type', 'text/html');
