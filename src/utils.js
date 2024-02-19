@@ -17,6 +17,12 @@ const generateChartConfig = (colors, datasets) => {
   /* should figure out a way to get that x label in… */
 };
 
+/* 
+  * should probably have some x data validation
+  * y can handle string gracefully… not so much x
+  * and we also need to parse x as date vs. x as number
+  * */
+
 module.exports = {
   readInput,
 };
