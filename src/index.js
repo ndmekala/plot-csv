@@ -1,7 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const { parse } = require('csv-parse/sync');
-const { readInput } = require('./utils');
+const { readInput, generateChartConfig } = require('./utils');
 const markup = require('./index.html');
 
 const app = express();
@@ -17,42 +17,28 @@ try {
   process.exit(1);
 }
 
-const xLabel = data[0][0];
-const yLabels = data[0].slice(1);
+const colors = {
+  gridAxisAndTextColor: '#585858', // dk grey
+  plotColors: [
+    '#af005f', // dk pink
+    '#ff5faf', // pink
+    '#af87d7', // lavender
+    '#5fafd7', // blue
+    '#00afaf', // cyan
+    '#5f8787', // dk cyan
+    '#5faf5f', // dk green
+    '#d7875f', // dk orange
+  ],
+};
 
-let datasets = [];
-const colors = [
-  '#af005f',
-  '#ff5faf',
-  '#af87d7',
-  '#5fafd7',
-  '#00afaf',
-  '#5f8787',
-  '#5faf5f',
-  '#d7875f',
-];
+const fontFamily = 'FiraCode Nerd Font, monospace';
 
-for (let i = 1; i < data[0].length; i++) {
-  datasets.push({
-    label: yLabels[i - 1],
-    data: data
-      .slice(1)
-      .map((row, index) => {
-        return {
-          x: row[0],
-          y: row[i],
-        };
-      })
-      .filter((row) => {
-        return row.y !== '';
-      }),
-    borderColor: colors[i - 1],
-    backgroundColor: colors[i - 1],
-  });
-}
+const config = generateChartConfig(data, colors, fontFamily);
 
-app.get('/api/datasets', (req, res) => {
-  res.json({ datasets });
+console.log(config);
+
+app.get('/api/config', (req, res) => {
+  res.json(config);
 });
 
 app.get('/', (req, res) => {
@@ -60,6 +46,7 @@ app.get('/', (req, res) => {
   res.send(markup);
 });
 
+/*
 app.get('/old', (req, res) => {
   res.header('Content-Type', 'text/html');
   res.send(`
@@ -167,6 +154,7 @@ app.get('/old', (req, res) => {
     </html>
     `);
 });
+*/
 
 const port = 4143;
 

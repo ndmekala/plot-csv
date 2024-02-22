@@ -10,19 +10,102 @@ const readInput = (argumentArray, expectedLength) => {
   }
 };
 
-const generateChartConfig = (colors, datasets) => {
-  /* make colors an object with color as key and hex code as value */
-  /* include grey. then use colors['grey'] etc. */
-  /* for array type stuff you can do arr = ['pink', 'blue'] then colors[arr[i]] etc*/
-  /* should figure out a way to get that x label in… */
+/* TODO figure out xlabel… */
+const generateData = (rawData, colors) => {
+  const yLabels = rawData[0].slice(1);
+
+  let data = [];
+
+  // start at index 1 because we don’t need header row
+  for (let i = 1; i < rawData[0].length; i++) {
+    data.push({
+      label: yLabels[i - 1],
+      data: rawData
+        .slice(1)
+        .map((row, index) => {
+          return {
+            x: row[0],
+            y: row[i],
+          };
+        })
+        .filter((row) => {
+          return row.y !== '';
+        }),
+      borderColor: colors.plotColors[i - 1],
+      backgroundColor: colors.plotColors[i - 1],
+    });
+  }
+  return { datasets: data };
 };
 
-/* 
-  * should probably have some x data validation
-  * y can handle string gracefully… not so much x
-  * and we also need to parse x as date vs. x as number
-  * */
+const generateOptions = (colors, fontFamily) => {
+  // TODO make dynamic --> we will need to support dates here
+  return {
+    responsive: true,
+    color: colors.gridAxisAndTextColor,
+    showLine: true,
+    plugins: {
+      legend: {
+        labels: {
+          font: {
+            family: fontFamily,
+          },
+        },
+        position: 'bottom',
+      },
+    },
+    scales: {
+      x: {
+        grid: {
+          color: colors.gridAxisAndTextColor,
+        },
+        type: 'linear',
+        position: 'bottom',
+        ticks: {
+          color: colors.gridAxisAndTextColor,
+          font: {
+            family: fontFamily,
+          },
+        },
+      },
+      y: {
+        grid: {
+          color: colors.gridAxisAndTextColor,
+        },
+        ticks: {
+          color: colors.gridAxisAndTextColor,
+          font: {
+            family: fontFamily,
+          },
+        },
+      },
+    },
+  };
+};
+
+/* TODO add params thru out */
+
+const generateChartConfig = (rawData, colors, fontFamily) => {
+  // TODO import Fira Code from google and use that like a civilized person
+
+  const type = 'scatter';
+  const data = generateData(rawData, colors);
+  const options = generateOptions(colors, fontFamily);
+  return {
+    type,
+    data,
+    options,
+  };
+};
+
+/*
+ * should probably have some x data validation
+ * y can handle string gracefully… not so much x
+ * and we also need to parse x as date vs. x as number
+ * */
 
 module.exports = {
   readInput,
+  generateChartConfig,
+  generateData,
 };

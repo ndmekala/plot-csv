@@ -49,12 +49,11 @@
 
       async function getConfig() {
         try {
-          const response = await fetch('/api/datasets');
+          const response = await fetch('/api/config');
 
           if (!response.ok) {
             throw new Error('Network response was not ok');
           }
-
           const data = await response.json();
           return data;
         } catch (error) {
@@ -64,11 +63,11 @@
 
       async function initChart() {
         try {
-          const data = await getConfig();
-          // Do something with the fetched data
-          console.log('Data successfully fetched:', data);
+          const config = await getConfig();
+          console.log('Data successfully fetched:', config);
+          const ctx = document.getElementById('plot');
+          new Chart(ctx, config);
         } catch (error) {
-          // Handle errors if any
           console.error('Error while fetching data:', error);
         }
       }
