@@ -86,8 +86,6 @@ const generateOptions = (colors, fontFamily) => {
 /* TODO add params thru out */
 
 const generateChartConfig = (rawData, colors, fontFamily) => {
-  // TODO import Fira Code from google and use that like a civilized person
-
   const type = 'scatter';
   const data = generateData(rawData, colors);
   const options = generateOptions(colors, fontFamily);
