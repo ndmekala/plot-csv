@@ -3,6 +3,7 @@ const fs = require('fs');
 const { parse } = require('csv-parse/sync');
 const { readInput, generateChartConfig } = require('./utils');
 const markup = require('./index.html');
+const { colors, fontFamily } = require('./constants');
 
 const app = express();
 let data = [];
@@ -14,26 +15,11 @@ try {
   process.exit(1);
 }
 
-const colors = {
-  gridAxisAndTextColor: '#585858', // dk grey
-  plotColors: [
-    '#af005f', // dk pink
-    '#ff5faf', // pink
-    '#af87d7', // lavender
-    '#5fafd7', // blue
-    '#00afaf', // cyan
-    '#5f8787', // dk cyan
-    '#5faf5f', // dk green
-    '#d7875f', // dk orange
-  ],
-};
-const fontFamily = 'Fira Code, monospace';
 const config = generateChartConfig(data, colors, fontFamily);
 
 app.get('/api/config', (req, res) => {
   res.json(config);
 });
-
 app.get('/', (req, res) => {
   res.header('Content-Type', 'text/html');
   res.send(markup);
