@@ -12,7 +12,6 @@ try {
   let csvPath = readInput(process.argv, 3);
   data = parse(fs.readFileSync(csvPath, 'utf8'));
   xDataType = processXData(data);
-  console.log(`X data type: ${xDataType}`);
 } catch (error) {
   console.error(error.message);
   process.exit(1);
