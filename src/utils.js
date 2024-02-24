@@ -148,11 +148,6 @@ const processXData = (dataArray) => {
     throw new Error('X data must be a number or date');
   }
 };
-/*
- * should probably have some x data validation
- * y can handle string gracefully… not so much x
- * and we also need to parse x as date vs. x as number
- * */
 
 module.exports = {
   readInput,
