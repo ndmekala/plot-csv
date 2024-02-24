@@ -1,21 +1,23 @@
 const express = require('express');
 const fs = require('fs');
 const { parse } = require('csv-parse/sync');
-const { readInput, generateChartConfig } = require('./utils');
+const { generateChartConfig, processXData, readInput } = require('./utils');
 const markup = require('./index.html');
 const { colors, fontFamily } = require('./constants');
 
 const app = express();
 let data = [];
+let xDataType;
 try {
   let csvPath = readInput(process.argv, 3);
   data = parse(fs.readFileSync(csvPath, 'utf8'));
+  xDataType = processXData(data);
 } catch (error) {
   console.error(error.message);
   process.exit(1);
 }
 
-const config = generateChartConfig(data, colors, fontFamily);
+const config = generateChartConfig(data, colors, fontFamily, xDataType);
 
 app.get('/api/config', (req, res) => {
   res.json(config);
