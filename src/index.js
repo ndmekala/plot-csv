@@ -7,17 +7,18 @@ const { colors, fontFamily } = require('./constants');
 
 const app = express();
 let data = [];
+let xDataType;
 try {
   let csvPath = readInput(process.argv, 3);
   data = parse(fs.readFileSync(csvPath, 'utf8'));
-  let xDataType = processXData(data);
+  xDataType = processXData(data);
   console.log(`X data type: ${xDataType}`);
 } catch (error) {
   console.error(error.message);
   process.exit(1);
 }
 
-const config = generateChartConfig(data, colors, fontFamily);
+const config = generateChartConfig(data, colors, fontFamily, xDataType);
 
 app.get('/api/config', (req, res) => {
   res.json(config);

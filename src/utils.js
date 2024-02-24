@@ -37,8 +37,41 @@ const generateData = (rawData, colors) => {
   return { datasets: data };
 };
 
-const generateOptions = (colors, fontFamily) => {
-  // TODO make dynamic --> we will need to support dates here
+const generateOptions = (colors, fontFamily, xDataType) => {
+  const generateXScaleData = (xDataType) => {
+    if (xDataType === 'number' || xDataType === 'either') {
+      return {
+        grid: {
+          color: colors.gridAxisAndTextColor,
+        },
+        type: 'linear',
+        position: 'bottom',
+        ticks: {
+          color: colors.gridAxisAndTextColor,
+          font: {
+            family: fontFamily,
+          },
+        },
+      };
+    } else if (xDataType === 'date') {
+      return {
+        grid: {
+          color: colors.gridAxisAndTextColor,
+        },
+        type: 'time',
+        time: {
+          tooltipFormat: 'DD T',
+        },
+        position: 'bottom',
+        ticks: {
+          color: colors.gridAxisAndTextColor,
+          font: {
+            family: fontFamily,
+          },
+        },
+      };
+    }
+  };
   return {
     responsive: true,
     color: colors.gridAxisAndTextColor,
@@ -54,19 +87,7 @@ const generateOptions = (colors, fontFamily) => {
       },
     },
     scales: {
-      x: {
-        grid: {
-          color: colors.gridAxisAndTextColor,
-        },
-        type: 'linear',
-        position: 'bottom',
-        ticks: {
-          color: colors.gridAxisAndTextColor,
-          font: {
-            family: fontFamily,
-          },
-        },
-      },
+      x: generateXScaleData(xDataType),
       y: {
         grid: {
           color: colors.gridAxisAndTextColor,
@@ -85,7 +106,7 @@ const generateOptions = (colors, fontFamily) => {
 const generateChartConfig = (rawData, colors, fontFamily, xDataType) => {
   const type = 'scatter';
   const data = generateData(rawData, colors);
-  const options = generateOptions(colors, fontFamily);
+  const options = generateOptions(colors, fontFamily, xDataType);
   return {
     type,
     data,
