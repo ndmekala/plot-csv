@@ -1,20 +1,19 @@
 const fs = require('fs');
 
-const readInput = (argumentArray, expectedLength) => {
-  if (argumentArray.length !== expectedLength) {
-    throw new Error('Please provide one valid path to a CSV file');
-  } else if (!fs.existsSync(argumentArray[2])) {
-    throw new Error('The provided path does not exist');
-  } else {
-    return argumentArray[2];
-  }
+const generateChartConfig = (rawData, colors, fontFamily, xDataType) => {
+  const type = 'scatter';
+  const data = generateData(rawData, colors);
+  const options = generateOptions(colors, fontFamily, xDataType);
+  return {
+    type,
+    data,
+    options,
+  };
 };
 
 const generateData = (rawData, colors) => {
   const yLabels = rawData[0].slice(1);
-
   let data = [];
-
   // start at index 1 because we don’t need header row
   for (let i = 1; i < rawData[0].length; i++) {
     data.push({
@@ -103,39 +102,24 @@ const generateOptions = (colors, fontFamily, xDataType) => {
   };
 };
 
-const generateChartConfig = (rawData, colors, fontFamily, xDataType) => {
-  const type = 'scatter';
-  const data = generateData(rawData, colors);
-  const options = generateOptions(colors, fontFamily, xDataType);
-  return {
-    type,
-    data,
-    options,
-  };
-};
-
 const processXData = (dataArray) => {
   const xValues = dataArray.map((row) => row[0]).slice(1);
-
   const hasEmptyStrings = (array) => {
     return !array.every((val) => {
       return val !== '';
     });
   };
-
   const allParseableAsNumbers = (array) => {
     return array.every((val) => {
       return !isNaN(val);
     });
   };
-
   const allParseableAsDates = (array) => {
     return array.every((val) => {
       let date = new Date(val);
       return !isNaN(date.getTime());
     });
   };
-
   if (hasEmptyStrings(xValues)) {
     throw new Error('X data cannot contain empty strings');
   } else if (allParseableAsNumbers(xValues) && allParseableAsDates(xValues)) {
@@ -149,10 +133,20 @@ const processXData = (dataArray) => {
   }
 };
 
+const readInput = (argumentArray, expectedLength) => {
+  if (argumentArray.length !== expectedLength) {
+    throw new Error('Please provide one valid path to a CSV file');
+  } else if (!fs.existsSync(argumentArray[2])) {
+    throw new Error('The provided path does not exist');
+  } else {
+    return argumentArray[2];
+  }
+};
+
 module.exports = {
-  readInput,
   generateChartConfig,
   generateData,
   generateOptions,
   processXData,
+  readInput,
 };
