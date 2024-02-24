@@ -10,7 +10,6 @@ const readInput = (argumentArray, expectedLength) => {
   }
 };
 
-/* TODO figure out xlabel… */
 const generateData = (rawData, colors) => {
   const yLabels = rawData[0].slice(1);
 
@@ -83,8 +82,6 @@ const generateOptions = (colors, fontFamily) => {
   };
 };
 
-/* TODO add params thru out */
-
 const generateChartConfig = (rawData, colors, fontFamily) => {
   const type = 'scatter';
   const data = generateData(rawData, colors);
@@ -96,6 +93,17 @@ const generateChartConfig = (rawData, colors, fontFamily) => {
   };
 };
 
+const processXData = (dataArray) => {
+  const handleInvalidInput = () => {
+    throw new Error(
+      'All values in the x column must be filled in, and numbers or dates',
+    );
+  };
+
+  const isNotEmpty = (array) => {};
+
+  const xValues = dataArray.map((row) => row[0]).slice(1);
+};
 /*
  * should probably have some x data validation
  * y can handle string gracefully… not so much x
@@ -106,4 +114,5 @@ module.exports = {
   readInput,
   generateChartConfig,
   generateData,
+  generateOptions,
 };
