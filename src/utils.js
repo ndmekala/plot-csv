@@ -82,7 +82,7 @@ const generateOptions = (colors, fontFamily) => {
   };
 };
 
-const generateChartConfig = (rawData, colors, fontFamily) => {
+const generateChartConfig = (rawData, colors, fontFamily, xDataType) => {
   const type = 'scatter';
   const data = generateData(rawData, colors);
   const options = generateOptions(colors, fontFamily);
@@ -94,15 +94,38 @@ const generateChartConfig = (rawData, colors, fontFamily) => {
 };
 
 const processXData = (dataArray) => {
-  const handleInvalidInput = () => {
-    throw new Error(
-      'All values in the x column must be filled in, and numbers or dates',
-    );
+  const xValues = dataArray.map((row) => row[0]).slice(1);
+
+  const hasEmptyStrings = (array) => {
+    return !array.every((val) => {
+      return val !== '';
+    });
   };
 
-  const isNotEmpty = (array) => {};
+  const allParseableAsNumbers = (array) => {
+    return array.every((val) => {
+      return !isNaN(val);
+    });
+  };
 
-  const xValues = dataArray.map((row) => row[0]).slice(1);
+  const allParseableAsDates = (array) => {
+    return array.every((val) => {
+      let date = new Date(val);
+      return !isNaN(date.getTime());
+    });
+  };
+
+  if (hasEmptyStrings(xValues)) {
+    throw new Error('X data cannot contain empty strings');
+  } else if (allParseableAsNumbers(xValues) && allParseableAsDates(xValues)) {
+    return 'either';
+  } else if (allParseableAsDates(xValues)) {
+    return 'date';
+  } else if (allParseableAsNumbers(xValues)) {
+    return 'number';
+  } else {
+    throw new Error('X data must be a number or date');
+  }
 };
 /*
  * should probably have some x data validation
@@ -115,4 +138,5 @@ module.exports = {
   generateChartConfig,
   generateData,
   generateOptions,
+  processXData,
 };

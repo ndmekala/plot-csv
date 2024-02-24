@@ -1,7 +1,7 @@
 const express = require('express');
 const fs = require('fs');
 const { parse } = require('csv-parse/sync');
-const { readInput, generateChartConfig } = require('./utils');
+const { generateChartConfig, processXData, readInput } = require('./utils');
 const markup = require('./index.html');
 const { colors, fontFamily } = require('./constants');
 
@@ -10,6 +10,8 @@ let data = [];
 try {
   let csvPath = readInput(process.argv, 3);
   data = parse(fs.readFileSync(csvPath, 'utf8'));
+  let xDataType = processXData(data);
+  console.log(`X data type: ${xDataType}`);
 } catch (error) {
   console.error(error.message);
   process.exit(1);
