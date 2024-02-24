@@ -4,7 +4,10 @@
   "description": "A command line utility that generates and serves a plot of CSV data",
   "main": "index.js",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "develop": "nodemon dist/bundle.js"
   },
   "repository": {
     "type": "git",
@@ -24,6 +27,7 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
+    "nodemon": "^3.0.3",
     "webpack-cli": "^5.1.4"
   }
 }

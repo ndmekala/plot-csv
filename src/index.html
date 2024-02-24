@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSV Plot</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@300..700&family=Recursive:wght@300&display=swap" rel="stylesheet">
+    <style>
+      body {
+        background-color: #1c1c1c;
+      }
+
+      h1 {
+        font-family: 'Fira Code', monospace;
+        text-align: center;
+        color: #ff5faf;
+        font-weight: normal;
+        font-size: 3rem;
+        margin: 0;
+      }
+
+      .container {
+        display: flex;
+        justify-content: center;
+        padding-top: 50px;
+      }
+
+      .wrapper {
+        width: 100%;
+        max-width: 800px;
+        padding-right: 10px;
+        padding-left: 10px;
+      }
+
+      .chart {
+        background-color: #1c1c1c;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="wrapper">
+        <h1>CSV Plot</h1>
+        <canvas class="chart" id="plot"></canvas>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+      const ctx = document.getElementById('plot');
+
+      async function getConfig() {
+        try {
+          const response = await fetch('/api/config');
+
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          const data = await response.json();
+          return data;
+        } catch (error) {
+          console.error('There was a problem fetching the data:', error);
+        }
+      }
+
+      async function initChart() {
+        try {
+          const config = await getConfig();
+          console.log('Data successfully fetched:', config);
+          const ctx = document.getElementById('plot');
+          new Chart(ctx, config);
+        } catch (error) {
+          console.error('Error while fetching data:', error);
+        }
+      }
+
+      initChart();
+    </script>
+  </body>
+</html>
