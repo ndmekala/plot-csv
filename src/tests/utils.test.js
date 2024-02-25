@@ -144,11 +144,25 @@ describe('generateData function', () => {
 });
 
 // TODO test generateOptions
+
+describe('generateOptions function', () => {
+  it('should return an options object for dates given date data', () => {});
+  it('should return an options object for numbers given numbers data', () => {});
+  it('should return an options object for numbers given flexible data', () => {});
+});
+
 // TODO test processXData
+
+describe('processXData function', () => {
+  it('should return the correct value if all values are parseable as numbers, but not dates', () => {});
+  it('should return the correct value if all values are parseable as dates, but not numbers', () => {});
+  it('should return the correct value if all values are parseable as either numbers or dates', () => {});
+  it('should throw an error if any value is not parseable as either a number or a date', () => {});
+  it('should throw an error if any value is an empty string', () => {});
+});
 
 describe('readInput function', () => {
   const argumentArrayLength = 3;
-
   it('should return the argument if it exists and is a valid path', () => {
     const argumentsArray = ['', '', './src/sample.csv'];
     const result = readInput(argumentsArray, argumentArrayLength);
