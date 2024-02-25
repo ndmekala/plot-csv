@@ -73,7 +73,6 @@ const generateOptions = (colors, fontFamily, xDataType) => {
   };
   return {
     responsive: true,
-    color: colors.gridAxisAndTextColor,
     showLine: true,
     plugins: {
       legend: {

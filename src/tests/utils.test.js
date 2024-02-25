@@ -143,22 +143,190 @@ describe('generateData function', () => {
   });
 });
 
-// TODO test generateOptions
-
 describe('generateOptions function', () => {
-  it('should return an options object for dates given date data', () => {});
-  it('should return an options object for numbers given numbers data', () => {});
-  it('should return an options object for numbers given flexible data', () => {});
+  it('should return an options object for dates given date data', () => {
+    const colors = {
+      gridAxisAndTextColor: '#ffffff',
+      plotColors: ['#FF0000', '#00FF00', '#0000FF'],
+    };
+    const fontFamily = 'Arial';
+    const xDataType = 'date';
+    const result = generateOptions(colors, fontFamily, xDataType);
+    expect(result).toEqual({
+      responsive: true,
+      showLine: true,
+      plugins: {
+        legend: {
+          labels: {
+            font: {
+              family: fontFamily,
+            },
+          },
+          position: 'bottom',
+        },
+      },
+      scales: {
+        x: {
+          grid: {
+            color: '#ffffff',
+          },
+          type: 'time',
+          time: {
+            tooltipFormat: 'DD T',
+          },
+          position: 'bottom',
+          ticks: {
+            color: '#ffffff',
+            font: {
+              family: fontFamily,
+            },
+          },
+        },
+        y: {
+          grid: {
+            color: '#ffffff',
+          },
+          ticks: {
+            color: '#ffffff',
+            font: {
+              family: fontFamily,
+            },
+          },
+        },
+      },
+    });
+  });
+
+  it('should return an options object for numbers given numbers data', () => {
+    const colors = {
+      gridAxisAndTextColor: '#ffffff',
+      plotColors: ['#FF0000', '#00FF00', '#0000FF'],
+    };
+    const fontFamily = 'Arial';
+    const xDataType = 'number';
+    const result = generateOptions(colors, fontFamily, xDataType);
+    expect(result).toEqual({
+      responsive: true,
+      showLine: true,
+      plugins: {
+        legend: {
+          labels: {
+            font: {
+              family: fontFamily,
+            },
+          },
+          position: 'bottom',
+        },
+      },
+      scales: {
+        x: {
+          grid: {
+            color: colors.gridAxisAndTextColor,
+          },
+          type: 'linear',
+          position: 'bottom',
+          ticks: {
+            color: colors.gridAxisAndTextColor,
+            font: {
+              family: fontFamily,
+            },
+          },
+        },
+        y: {
+          grid: {
+            color: '#ffffff',
+          },
+          ticks: {
+            color: '#ffffff',
+            font: {
+              family: fontFamily,
+            },
+          },
+        },
+      },
+    });
+  });
+
+  it('should return an options object for numbers given flexible data', () => {
+    const colors = {
+      gridAxisAndTextColor: '#ffffff',
+      plotColors: ['#FF0000', '#00FF00', '#0000FF'],
+    };
+    const fontFamily = 'Arial';
+    const xDataType = 'number';
+    const result = generateOptions(colors, fontFamily, xDataType);
+    expect(result).toEqual({
+      responsive: true,
+      showLine: true,
+      plugins: {
+        legend: {
+          labels: {
+            font: {
+              family: fontFamily,
+            },
+          },
+          position: 'bottom',
+        },
+      },
+      scales: {
+        x: {
+          grid: {
+            color: colors.gridAxisAndTextColor,
+          },
+          type: 'linear',
+          position: 'bottom',
+          ticks: {
+            color: colors.gridAxisAndTextColor,
+            font: {
+              family: fontFamily,
+            },
+          },
+        },
+        y: {
+          grid: {
+            color: '#ffffff',
+          },
+          ticks: {
+            color: '#ffffff',
+            font: {
+              family: fontFamily,
+            },
+          },
+        },
+      },
+    });
+  });
 });
 
-// TODO test processXData
-
 describe('processXData function', () => {
-  it('should return the correct value if all values are parseable as numbers, but not dates', () => {});
-  it('should return the correct value if all values are parseable as dates, but not numbers', () => {});
-  it('should return the correct value if all values are parseable as either numbers or dates', () => {});
-  it('should throw an error if any value is not parseable as either a number or a date', () => {});
-  it('should throw an error if any value is an empty string', () => {});
+  it('should return the correct value if all values are parseable as numbers, but not dates', () => {
+    let result = processXData([
+      ['1.33', '1'],
+      ['2.33', '2'],
+    ]);
+    expect(result).toEqual('number');
+  });
+  it('should return the correct value if all values are parseable as dates, but not numbers', () => {
+    let result = processXData([
+      ['2023-01-01', '1'],
+      ['2023-01-02', '2'],
+    ]);
+    expect(result).toEqual('date');
+  });
+  it('should return the correct value if all values are parseable as either numbers or dates', () => {
+    let result = processXData([['1', '1'], ['2', '2']]);
+    expect(result).toEqual('either');
+  });
+  it('should throw an error if any value is not parseable as either a number or a date', () => {
+    expect(() => processXData([['1', '2'], ['string', '1']])).toThrow(
+      'X data must be a number or date',
+    );
+  });
+  it('should throw an error if any value is an empty string', () => {
+    expect(() => processXData([['1', '1'], ['', '2']])).toThrow(
+      'X data cannot contain empty strings',
+    )
+  });
 });
 
 describe('readInput function', () => {
