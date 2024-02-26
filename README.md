@@ -12,9 +12,15 @@ plot-csv ./path/to/csv
 
 ## Development
 
-To have webpack watch your source files and rebuild on change: `npm run watch`.
+To have webpack watch your source files and rebuild on change: 
+```
+npm run watch
+```
 
-To have the CLI watch the `dist` directory and restart on change, run the develop command with a CSV specified: `npm run develop ./path/to/csv`
+To have the CLI watch the `dist` directory and restart on change, run the develop command with a CSV specified: 
+```
+npm run develop ./path/to/csv
+```
 
 ## Testing
 ```
