@@ -1,6 +1,6 @@
 # `plot-csv`
 
-> A CLI that renders a plot in the browser from a CSV of x-y data
+> CSV to plot in one command
 
 ## Usage
 

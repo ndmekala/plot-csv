@@ -1,4 +1,4 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -24,10 +24,31 @@
         margin: 0;
       }
 
+      p {
+        font-family: 'Fira Code', monospace;
+        color: #ff5faf;
+        font-size: 1.5rem;
+        text-align: center;
+      }
+
+      a,
+      a:visited {
+        color: #af87d7;
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
       .container {
         display: flex;
         justify-content: center;
         padding-top: 50px;
+      }
+
+      .hidden {
+        display: none;
       }
 
       .wrapper {
@@ -47,37 +68,45 @@
       <div class="wrapper">
         <h1>CSV Plot</h1>
         <canvas class="chart" id="plot"></canvas>
+        <div id="gh-pages-copy" class="hidden">
+          <p>CSV to plot in one command</p>
+          <p><a href="https://github.com/ndmekala/plot-csv">Github 🔗</a></p>
+        </div>
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/luxon@^2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon@^1"></script>
+    <script src="sample-data.js"></script>
     <script>
       const ctx = document.getElementById('plot');
 
       async function getConfig() {
         try {
           const response = await fetch('/api/config');
-
           if (!response.ok) {
             throw new Error('Network response was not ok');
           }
+
           const data = await response.json();
           return data;
         } catch (error) {
           console.error('There was a problem fetching the data:', error);
+          return null;
         }
       }
 
       async function initChart() {
-        try {
-          const config = await getConfig();
+        let config = await getConfig();
+        if (!config) {
+          config = sampleData;
+          document.getElementById('gh-pages-copy').classList.remove('hidden');
+          console.log('Data not fetched, using hardcoded sample data:', config);
+        } else {
           console.log('Data successfully fetched:', config);
-          const ctx = document.getElementById('plot');
-          new Chart(ctx, config);
-        } catch (error) {
-          console.error('Error while fetching data:', error);
         }
+        const ctx = document.getElementById('plot');
+        new Chart(ctx, config);
       }
 
       initChart();
