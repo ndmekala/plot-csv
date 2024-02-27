@@ -24,10 +24,31 @@
         margin: 0;
       }
 
+      p {
+        font-family: 'Fira Code', monospace;
+        color: #ff5faf;
+        font-size: 1.5rem;
+        text-align: center;
+      }
+
+      a,
+      a:visited {
+        color: #af87d7;
+        text-decoration: none;
+      }
+
+      a:hover {
+        text-decoration: underline;
+      }
+
       .container {
         display: flex;
         justify-content: center;
         padding-top: 50px;
+      }
+
+      .hidden {
+        display: none;
       }
 
       .wrapper {
@@ -47,6 +68,10 @@
       <div class="wrapper">
         <h1>CSV Plot</h1>
         <canvas class="chart" id="plot"></canvas>
+        <div id="gh-pages-copy" class="hidden">
+          <p>CSV to plot in one command</p>
+          <p><a href="https://github.com/ndmekala/plot-csv">Github 🔗</a></p>
+        </div>
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -75,6 +100,7 @@
         let config = await getConfig();
         if (!config) {
           config = sampleData;
+          document.getElementById('gh-pages-copy').classList.remove('hidden');
           console.log('Data not fetched, using hardcoded sample data:', config);
         } else {
           console.log('Data successfully fetched:', config);
