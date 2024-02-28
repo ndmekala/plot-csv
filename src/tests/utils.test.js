@@ -7,6 +7,21 @@ const {
 } = require('../utils');
 
 describe('generateData function', () => {
+  it('should gracefully handle more columns than colors', () => {
+    const rawData = [
+      ['x', 'y1', 'y2', 'y3', 'y4'],
+      ['1', '2', '3', '4', '5'],
+      ['2', '3', '4', '5', '6'],
+    ];
+    const colors = {
+      plotColors: ['#FF0000', '#00FF00', '#0000FF'],
+    };
+    const result = generateData(rawData, colors);
+    expect(result.datasets.every((dataset) => dataset.backgroundColor)).toBe(
+      true,
+    );
+  });
+
   it('should return the expected data object for numeric values', () => {
     const rawData = [
       ['x', 'y1', 'y2', 'y3'],
@@ -314,18 +329,27 @@ describe('processXData function', () => {
     expect(result).toEqual('date');
   });
   it('should return the correct value if all values are parseable as either numbers or dates', () => {
-    let result = processXData([['1', '1'], ['2', '2']]);
+    let result = processXData([
+      ['1', '1'],
+      ['2', '2'],
+    ]);
     expect(result).toEqual('either');
   });
   it('should throw an error if any value is not parseable as either a number or a date', () => {
-    expect(() => processXData([['1', '2'], ['string', '1']])).toThrow(
-      'X data must be a number or date',
-    );
+    expect(() =>
+      processXData([
+        ['1', '2'],
+        ['string', '1'],
+      ]),
+    ).toThrow('X data must be a number or date');
   });
   it('should throw an error if any value is an empty string', () => {
-    expect(() => processXData([['1', '1'], ['', '2']])).toThrow(
-      'X data cannot contain empty strings',
-    )
+    expect(() =>
+      processXData([
+        ['1', '1'],
+        ['', '2'],
+      ]),
+    ).toThrow('X data cannot contain empty strings');
   });
 });
 
