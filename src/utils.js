@@ -29,8 +29,8 @@ const generateData = (rawData, colors) => {
         .filter((row) => {
           return row.y !== '';
         }),
-      borderColor: colors.plotColors[i - 1],
-      backgroundColor: colors.plotColors[i - 1],
+      borderColor: colors.plotColors[(i - 1) % colors.plotColors.length],
+      backgroundColor: colors.plotColors[(i - 1) % colors.plotColors.length],
     });
   }
   return { datasets: data };
