@@ -1,6 +1,8 @@
 # `plot-csv`
 
-> CSV to plot in one command
+> CSV to scatter plot in a browser via ChartJS in one command
+
+Check out an [example](https://nirmal.meka.la/plot-csv).
 
 ## Usage
 
