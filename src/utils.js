@@ -1,9 +1,15 @@
 const fs = require('fs');
 
-const generateChartConfig = (rawData, colors, fontFamily, xDataType) => {
+const generateChartConfig = (
+  rawData,
+  colors,
+  fontFamily,
+  xDataType,
+  params,
+) => {
   const type = 'scatter';
-  const data = generateData(rawData, colors);
-  const options = generateOptions(colors, fontFamily, xDataType);
+  const data = generateData(rawData, colors, params);
+  const options = generateOptions(colors, fontFamily, xDataType, params);
   return {
     type,
     data,
@@ -11,7 +17,7 @@ const generateChartConfig = (rawData, colors, fontFamily, xDataType) => {
   };
 };
 
-const generateData = (rawData, colors) => {
+const generateData = (rawData, colors, params) => {
   const yLabels = rawData[0].slice(1);
   let data = [];
   // start at index 1 because we don’t need header row
@@ -31,12 +37,13 @@ const generateData = (rawData, colors) => {
         }),
       borderColor: colors.plotColors[(i - 1) % colors.plotColors.length],
       backgroundColor: colors.plotColors[(i - 1) % colors.plotColors.length],
+      stack: params.stacked ? 'combined' : undefined,
     });
   }
   return { datasets: data };
 };
 
-const generateOptions = (colors, fontFamily, xDataType) => {
+const generateOptions = (colors, fontFamily, xDataType, params) => {
   const generateXScaleData = (xDataType) => {
     if (xDataType === 'number' || xDataType === 'either') {
       return {
@@ -96,6 +103,7 @@ const generateOptions = (colors, fontFamily, xDataType) => {
             family: fontFamily,
           },
         },
+        stacked: params.stacked,
       },
     },
   };
@@ -132,10 +140,9 @@ const processXData = (dataArray) => {
   }
 };
 
-const readInput = (argumentArray, expectedLength) => {
-  if (argumentArray.length !== expectedLength) {
-    throw new Error('Please provide one valid path to a CSV file');
-  } else if (!fs.existsSync(argumentArray[2])) {
+const readInput = (argumentArray) => {
+  // TODO support file path provided anywhere in arg array
+  if (!fs.existsSync(argumentArray[2])) {
     throw new Error('The provided path does not exist');
   } else {
     return argumentArray[2];
