@@ -37,7 +37,7 @@ const generateData = (rawData, colors, params) => {
         }),
       borderColor: colors.plotColors[(i - 1) % colors.plotColors.length],
       backgroundColor: colors.plotColors[(i - 1) % colors.plotColors.length],
-      stack: params.stacked ? 'combined' : undefined
+      stack: params.stacked ? 'combined' : undefined,
     });
   }
   return { datasets: data };
@@ -103,7 +103,7 @@ const generateOptions = (colors, fontFamily, xDataType, params) => {
             family: fontFamily,
           },
         },
-        stacked: params.stacked
+        stacked: params.stacked,
       },
     },
   };
@@ -141,7 +141,8 @@ const processXData = (dataArray) => {
 };
 
 const readInput = (argumentArray) => {
-   if (!fs.existsSync(argumentArray[2])) {
+  // TODO support file path provided anywhere in arg array
+  if (!fs.existsSync(argumentArray[2])) {
     throw new Error('The provided path does not exist');
   } else {
     return argumentArray[2];
